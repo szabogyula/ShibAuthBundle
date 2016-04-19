@@ -1,0 +1,3 @@
+niif_shib_auth_homepage:
+    path:     /
+    defaults: { _controller: NiifShibAuthBundle:Default:index }

@@ -1,0 +1,12 @@
+{
+    "name": "niif/shib-auth-bundle",
+    "description": "Shibboleth based (federated SAML) user authentication bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tamás Dévai",
+            "email": "dorion@niif.hu"
+        }
+    ],
+    "require": {}
+}
