@@ -8,13 +8,13 @@ class ShibAuthUser implements UserInterface
 
   private $username;
   private $mail;
-  private $affilations;
+  private $affiliations;
   private $entitlements;
   
   public function __construct($username, $mail, $affiliations, $entitlements) {
     $this->username = $username;
     $this->mail = $mail;
-    $this->affilations = $affiliations;
+    $this->affiliations = $affiliations;
     $this->entitlements = $entitlements;
   }
 
@@ -50,15 +50,15 @@ class ShibAuthUser implements UserInterface
   /**
    * @return mixed
    */
-  public function getAffilations() {
-    return $this->affilations;
+  public function getAffiliations() {
+    return $this->affiliations;
   }
 
   /**
-   * @param mixed $affilations
+   * @param mixed $affiliations
    */
-  public function setAffilations($affilations) {
-    $this->affilations = $affilations;
+  public function setAffiliations($affiliations) {
+    $this->affiliations = $affiliations;
   }
 
   /**

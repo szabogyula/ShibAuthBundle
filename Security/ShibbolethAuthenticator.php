@@ -4,12 +4,15 @@ namespace Niif\ShibAuthBundle\Security;
 
 use Niif\ShibAuthBundle\Security\User\ShibAuthUser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
 class ShibbolethAuthenticator extends AbstractGuardAuthenticator
@@ -32,7 +35,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
     return array(
       'userName'      => $request->server->get('eppn'),
       'mail'          => $request->server->get('mail'),
-      'affilations'   => $request->server->get('affilation'),
+      'affiliations'   => $request->server->get('affiliation'),
       'entitlements'  => $request->server->get('entitlement'),
     );
   }
@@ -43,12 +46,12 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
       $user = new ShibAuthUser(
         $credentials['userName'],
         $credentials['mail'],
-        $credentials['affilations'],
+        $credentials['affiliations'],
         $credentials['entitlements']
       );
     }
     else {
-      $user = null;
+      $user = '';
     }
     // if null, authentication will fail
     // if a User object, checkCredentials() is called
@@ -79,6 +82,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
       // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
     );
 
+    $request->getSession()->invalidate();
     return new JsonResponse($data, 403);
   }
 
@@ -87,16 +91,18 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
    */
   public function start(Request $request, AuthenticationException $authException = null)
   {
-    $data = array(
-      // you might translate this message
-      'message' => 'Authentication Required'
-    );
-
-    return new JsonResponse($data, 401);
+    $data = '<a href="https://dev.aai.niif.hu/Shibboleth.sso/DSS?target=https%3A%2F%2Fdev.aai.niif.hu%2Fdocument_manager%2Fweb%2Fapp_dev.php">Shib Login</a><br />';
+    //$data = $this->generateLoginURL();
+    $request->getSession()->invalidate();
+    return new Response($data, 401);
   }
 
   public function supportsRememberMe()
   {
     return false;
+  }
+
+  public function generateLoginURL($linkText = 'Shibboleth Login') {
+    //retrun $this->generateUrl($linktext, 'https://dev.aai.niif.hu/Shibboleth.sso/DSS?target=https%3A%2F%2Fdev.aai.niif.hu%2Fdocument_manager%2Fweb%2Fapp_dev.php', UrlGeneratorInterface::ABSOLUTE_URL);
   }
 }

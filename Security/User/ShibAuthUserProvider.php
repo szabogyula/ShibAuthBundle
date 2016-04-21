@@ -39,7 +39,7 @@ class ShibAuthUserProvider implements UserProviderInterface
 
   public function supportsClass($class)
   {
-    return $class === 'Niif\ShibAuthBundle\Security\User\User';
+    return $class === 'Niif\ShibAuthBundle\Security\User\ShibAuthUser';
   }
 
   private function getAttribute($attributeName, $defaultValue = null) {
