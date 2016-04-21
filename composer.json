@@ -8,8 +8,8 @@
             "email": "dorion@niif.hu"
         }
     ],
-    "require": {}
     "autoload": {
         "psr-4": { "Niif\\ShibAuthBundle\\": "" }
     },
+    "require": {}
 }
