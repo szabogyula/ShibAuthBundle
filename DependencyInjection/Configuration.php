@@ -17,13 +17,22 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder();;
         $rootNode = $treeBuilder->root('niif_shib_auth');
-
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+        $rootNode
+            ->children()
+                ->scalarNode('baseURL')
+                    ->defaultValue('http://example.com/')
+                ->end()
+                ->scalarNode('sessionInitiator')
+                    ->defaultValue('Shibbholeth.sso/DSS')
+                ->end()
+                ->scalarNode('logoutPath')
+                    ->defaultValue('Shibboleth.sso/Logout')
+                ->end()
+            ->end()
+        ;
+        
         return $treeBuilder;
     }
 }
