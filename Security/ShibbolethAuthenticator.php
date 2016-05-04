@@ -3,29 +3,25 @@
 namespace Niif\ShibAuthBundle\Security;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 use Niif\ShibUserDatabaseProviderBundle\Security\User\ShibAuthUser;
 
 
 class ShibbolethAuthenticator extends AbstractGuardAuthenticator
 {
-  private $sessionInitiator;
-  private $logoutPath;
-  private $baseURL;
+  private $logger, $config;
 
-  public function __construct($baseURL, $sessionInitiator, $logoutPath)
+  public function __construct($logger, $config)
   {
-    $this->baseURL = $baseURL;
-    $this->sessionInitiator = $sessionInitiator;
-    $this->logoutPath = $logoutPath;
+    $this->config = $config;
+    $this->logger = $logger;
   }
   /**
    * Called on every request. Return whatever credentials you want,
@@ -99,9 +95,9 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
    */
   public function start(Request $request, AuthenticationException $authException = null)
   {
-    $data = '<a href="https://dev.aai.niif.hu/Shibboleth.sso/DSS?target=https%3A%2F%2Fdev.aai.niif.hu%2Fdocument_manager%2Fweb%2Fapp_dev.php">Shib Login</a><br />';
-    //$data = $this->generateLoginURL();
-    //$request->getSession()->invalidate();
+    $loginURL = $this->getLoginURL();
+    $data = '<a href="'. $loginURL .'">Shib Login</a><br />';
+
     return new Response($data, 401);
   }
 
@@ -111,6 +107,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
   }
 
   public function getLoginURL() {
+    
     $protocol = 'http';
     if (isset($_SERVER['HTTPS'])) {
       $protocol = 'https';
@@ -118,7 +115,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
 
     $currentURL = urlencode($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
-    return $this->baseURL . $this->sessionInitiator .'?target='. $currentURL;
+    return $this->config['baseURL'] . $this->config['sessionInitiator'] .'?target='. $currentURL;
   }
 
   public function getLogoutURL() {
@@ -129,6 +126,6 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
 
     $currentURL = urlencode($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
-    return $this->baseURL . $this->logoutPath .'?return='. $currentURL;
+    return $this->config['baseURL'] . $this->config['logoutPath'] .'?return='. $currentURL;
   }
 }

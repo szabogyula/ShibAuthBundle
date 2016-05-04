@@ -1,8 +1,5 @@
 services:
     niif_shib_auth.shib_authenticator:
       class: Niif\ShibAuthBundle\Security\ShibbolethAuthenticator
-      arguments: [%niif_shib_auth.baseURL%, %niif_shib_auth.sessionInitiator%, %niif_shib_auth.logoutPath%]
-#    niif_shib_auth.example:
-#        class: Niif\ShibAuthBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+      arguments: ["@logger", %niif_shib_auth%]
 
