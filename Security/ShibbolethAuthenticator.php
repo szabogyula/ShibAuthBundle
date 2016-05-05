@@ -29,34 +29,28 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
    */
   public function getCredentials(Request $request)
   {
-    if (!$request->server->get('Shib-Identity-Provider')) {
-      // no token? Return null and no other methods will be called
-      return;
+    if ($request->server->get('Shib-Identity-Provider')) {
+      // What you return here will be passed to getUser() as $credentials
+      if ($request->server->get('eppn') AND $request->server->get('mail'))
+        return array(
+          'userName'      => $request->server->get('eppn'),
+          'mail'          => $request->server->get('mail'),
+          'affiliations'  => $request->server->get('affiliation'),
+          'entitlements'  => $request->server->get('entitlement'),
+        );
     }
 
-    // What you return here will be passed to getUser() as $credentials
-    if ($request->server->get('eppn') AND $request->server->get('mail'))
-    return array(
-      'userName'      => $request->server->get('eppn'),
-      'mail'          => $request->server->get('mail'),
-      'affiliations'  => $request->server->get('affiliation'),
-      'entitlements'  => $request->server->get('entitlement'),
-    );
+    // no token? Return null and no other methods will be called
+    return null;
   }
 
   public function getUser($credentials, UserProviderInterface $userProvider)
   {
     // if null, authentication will fail
     // if a User object, checkCredentials() is called
-
     $user = null;
-    if ($credentials !== NULL AND is_array($credentials)) {
-      $user = new ShibAuthUser(
-        $credentials['userName'],
-        $credentials['mail'],
-        $credentials['affiliations'],
-        $credentials['entitlements']
-      );
+    if ($credentials !== null AND is_array($credentials)) {
+      $user = $userProvider->loadUserByUsername($credentials['userName']);
     }
 
     return $user;
@@ -95,8 +89,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
    */
   public function start(Request $request, AuthenticationException $authException = null)
   {
-    $loginURL = $this->getLoginURL();
-    $data = '<a href="'. $loginURL .'">Shib Login</a><br />';
+    $data = '<a href="' . $this->getLoginURL() . '">Shib Login</a><br />';
 
     return new Response($data, 401);
   }
@@ -107,25 +100,23 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
   }
 
   public function getLoginURL() {
-    
-    $protocol = 'http';
-    if (isset($_SERVER['HTTPS'])) {
-      $protocol = 'https';
-    }
-
-    $currentURL = urlencode($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    $currentURL = urlencode($this->getProtocol() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
     return $this->config['baseURL'] . $this->config['sessionInitiator'] .'?target='. $currentURL;
   }
 
   public function getLogoutURL() {
+    $currentURL = urlencode($this->getProtocol() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+    return $this->config['baseURL'] . $this->config['logoutPath'] .'?return='. $currentURL;
+  }
+
+  private function getProtocol() {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS'])) {
       $protocol = 'https';
     }
 
-    $currentURL = urlencode($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-
-    return $this->config['baseURL'] . $this->config['logoutPath'] .'?return='. $currentURL;
+    return $protocol;
   }
 }
