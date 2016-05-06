@@ -35,18 +35,6 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->scalarNode('mailAttribute')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('affiliationAttribute')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('entitlementAttribute')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
             ->end()
         ;
         
