@@ -55,7 +55,7 @@ in ```app/config/parameters.yml```
 ```yaml
 parameters
     ...
-    shib_auth_base_URL: "https://yoursp.com/"
+    shib_auth_base_url: "https://yoursp.com/"
     shib_auth_session_initiator: "Shibboleth.sso/DSS"
     shib_auth_logout_path: "Shiboleth.sso/Logout"
     ...

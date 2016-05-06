@@ -31,10 +31,9 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
   {
     if ($request->server->get('Shib-Identity-Provider')) {
       // What you return here will be passed to getUser() as $credentials
-      if ($request->server->get('eppn') AND $request->server->get('mail'))
-        return array(
-          'userName' => $request->server->get($this->config['usernameAttribute']),
-        );
+      return array(
+        'username' => $request->server->get($this->config['usernameAttribute']),
+      );
     }
 
     // no token? Return null and no other methods will be called
@@ -47,7 +46,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
     // if a User object, checkCredentials() is called
     $user = null;
     if ($credentials !== null AND is_array($credentials)) {
-      $user = $userProvider->loadUserByUsername($credentials['userName']);
+      $user = $userProvider->loadUserByUsername($credentials['username']);
     }
 
     return $user;
