@@ -2,4 +2,3 @@ services:
     niif_shib_auth.shib_authenticator:
       class: Niif\ShibAuthBundle\Security\ShibbolethAuthenticator
       arguments: ["@logger", %niif_shib_auth%]
-

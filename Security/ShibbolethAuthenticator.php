@@ -33,10 +33,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
       // What you return here will be passed to getUser() as $credentials
       if ($request->server->get('eppn') AND $request->server->get('mail'))
         return array(
-          'userName'      => $request->server->get('eppn'),
-          'mail'          => $request->server->get('mail'),
-          'affiliations'  => $request->server->get('affiliation'),
-          'entitlements'  => $request->server->get('entitlement'),
+          'userName' => $request->server->get($this->config['usernameAttribute']),
         );
     }
 
