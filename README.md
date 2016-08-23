@@ -43,27 +43,29 @@ update your ```app/config/config.yml```
 ```yaml
 ...
 niif_shib_auth:
-    baseURL:          "%shib_auth_base_URL%" # required
+    baseURL:          "%shib_auth_base_url%" # required
     sessionInitiator: "%shib_auth_session_initiator%" # have default value
     logoutPath:       "%shib_auth_logout_path%" # have default value
+    usernameAttribute: "%shib_auth_username_attribute%" # required
 ...
 ```
 then update your
 
-in ```app/config/parameters.yml```
+in `app/config/parameters.yml`
 
 ```yaml
 parameters
     ...
     shib_auth_base_url: "https://yoursp.com/"
     shib_auth_session_initiator: "Shibboleth.sso/DSS"
-    shib_auth_logout_path: "Shiboleth.sso/Logout"
+    shib_auth_logout_path: "Shibboleth.sso/Logout"
+    shib_auth_username_attribute: "eppn"
     ...
 ```
 
 then add new firewall rule
 
-in ```app/config/security.yml```
+in `app/config/security.yml`
 
 ```yaml
     ...
