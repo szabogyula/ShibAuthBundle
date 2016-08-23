@@ -9,10 +9,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
-use Niif\ShibUserDatabaseProviderBundle\Security\User\ShibAuthUser;
-
 
 class ShibbolethAuthenticator extends AbstractGuardAuthenticator
 {
