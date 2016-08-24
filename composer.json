@@ -6,6 +6,10 @@
         {
             "name": "Tamás Dévai",
             "email": "dorion@niif.hu"
+        },
+        {
+            "name": "Gyula Szabó",
+            "email": "gyufi@niif.hu"
         }
     ],
     "autoload": {

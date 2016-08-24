@@ -7,23 +7,9 @@ Then you can implement access control as symfony does.
 
 # Install
 
-Insert lines above to ```composer.json```:
+Install the bundle by composer
 
-```json
-...
-    "require": {
-        "niif/shib-auth-bundle": "dev-master"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-...
-```
-
-Install the bundle,
-
-```
-composer require niif/shib-auth-bundle
-```
+`composer require niif/shib-auth-bundle`
 
 Update ```app/AppKernel.php```
 
@@ -42,25 +28,13 @@ update your ```app/config/config.yml```
 
 ```yaml
 ...
-niif_shib_auth:
-    baseURL:          "%shib_auth_base_url%" # required
-    sessionInitiator: "%shib_auth_session_initiator%" # have default value
-    logoutPath:       "%shib_auth_logout_path%" # have default value
-    usernameAttribute: "%shib_auth_username_attribute%" # required
+niif_shib_auth: ~
+# niif_shib_auth:
+    # baseURL:          "%shib_auth_base_url%" # optional, have default value:  /Shibboleth.sso/
+    # sessionInitiator: "%shib_auth_session_initiator%" # optional, have default value: Login
+    # logoutPath:       "%shib_auth_logout_path%" # optional, have default value: Logout
+    # usernameAttribute: "%shib_auth_username_attribute%" # optional, have default value: REMOTE_USER
 ...
-```
-then update your
-
-in `app/config/parameters.yml`
-
-```yaml
-parameters
-    ...
-    shib_auth_base_url: "https://yoursp.com/"
-    shib_auth_session_initiator: "Shibboleth.sso/DSS"
-    shib_auth_logout_path: "Shibboleth.sso/Logout"
-    shib_auth_username_attribute: "eppn"
-    ...
 ```
 
 then add new firewall rule
@@ -77,6 +51,31 @@ in `app/config/security.yml`
     ...
     firewalls:
         ...            
+        main:
+            guard:
+                authenticators:
+                    - niif_shib_auth.shib_authenticator
+        ...
+```
+
+# Impersonate
+The authenticator support the impersonate feature.
+
+in `app/config/security.yml`
+
+```yaml
+    ...
+    providers:
+        ...
+        shibboleth:
+            id: shibboleth.user.provider
+        in_memory:
+            memory: ~
+        ...
+    ...
+    firewalls:
+        ...
+        switch_user: { provider: in_memory }         
         main:
             guard:
                 authenticators:
