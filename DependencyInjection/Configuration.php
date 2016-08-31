@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('baseURL')
-                    ->defaultValue('/Shibbholeth.sso/')
+                    ->defaultValue('/Shibboleth.sso/')
                 ->end()
                 ->scalarNode('sessionInitiator')
                     ->defaultValue('Login')
