@@ -55,6 +55,11 @@ in `app/config/security.yml`
             guard:
                 authenticators:
                     - niif_shib_auth.shib_authenticator
+        logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
+                success_handler: niif_shib_auth.shib_authenticator
         ...
 ```
 
@@ -80,6 +85,11 @@ in `app/config/security.yml`
             guard:
                 authenticators:
                     - niif_shib_auth.shib_authenticator
+        logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
+                success_handler: niif_shib_auth.shib_authenticator
         ...
 ```
 
