@@ -13,7 +13,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 
-class ShibbolethAuthenticator extends AbstractGuardAuthenticator
+use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
+
+class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements LogoutSuccessHandlerInterface
 {
     private $logger;
     private $config;
@@ -44,7 +46,11 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
               'username' => $request->server->get($this->config['usernameAttribute']),
             );
         } else {
-            throw new AuthenticationException('There is no shibboleth session, not found '.$shibbolethModuleAttribute.' key in $_SERVER array');
+            throw new AuthenticationException(
+                'There is no shibboleth session, not found '
+                .$shibbolethModuleAttribute
+                .' key in $_SERVER array'
+            );
         }
     }
 
@@ -135,5 +141,11 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator
         }
 
         return $protocol;
+    }
+
+    public function onLogoutSuccess(Request $request)
+    {
+        $request->getSession()->invalidate();
+        return new RedirectResponse($this->getLogoutURL());
     }
 }
