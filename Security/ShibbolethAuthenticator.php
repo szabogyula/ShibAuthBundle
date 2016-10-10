@@ -130,7 +130,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
     private function getLogoutURL()
     {
         $currentURL = urlencode($this->getProtocol().'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-        return $this->config['baseURL'].$this->config['logoutPath'].'?return='.$currentURL;
+        return $this->config['baseURL'].$this->config['logoutPath'].'?return='.$this->config['logoutReturnPath'];
     }
 
     private function getProtocol()
