@@ -1,5 +1,4 @@
-The bundle provides roles for authenticated users according SAML entitlement attributes in $_SERVER variables
-in Symfony 3.x which implements the Guard abstract class.
+The bundle provides the authentication security token to users who authenticate via Shibboleth SP apache implementation.
 
 Then you can implement access control as symfony does.
  
