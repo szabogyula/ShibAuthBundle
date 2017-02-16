@@ -39,12 +39,16 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
         if ($request->server->has($shibbolethModuleAttribute)) {
             // What you return here will be passed to getUser() as $credentials
             $username = $request->server->get($this->config['usernameAttribute']);
-            if (! $username) {
+            if (! $username) { // return null, there is no username in server variables
+                $this->logger->debug('[ShibbolethAuthenticator::getCredential] no username in server variables');
                 return null;
             }
-            return array(
+
+            $retarray = array(
               'username' => $request->server->get($this->config['usernameAttribute']),
             );
+            $this->logger->debug('[ShibbolethAuthenticator::getCredential] success '. var_export($retarray,1));
+            return $retarray;
         } else {
             throw new AuthenticationException(
                 'There is no shibboleth session, not found '
@@ -76,15 +80,16 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
 
         if ($credentials !== null and is_array($credentials)) {
             $user = $userProvider->loadUserByUsername($credentials['username']);
-            $this->logger->debug('[ShibbolethAuthenticator::getUser] '.$user->getUsername());
+            $this->logger->debug('[ShibbolethAuthenticator::getUser] success '.$user->getUsername());
             return $user;
         }
+        $this->logger->debug('[ShibbolethAuthenticator::getUser] false return null');
         return null;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        $this->logger->debug('[ShibbolethAuthenticator::checkCredentials]');
+        $this->logger->debug('[ShibbolethAuthenticator::checkCredentials] return true');
         // check credentials - e.g. make sure the password is valid
         // no credential check is needed in this case
 
@@ -97,6 +102,18 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
         $this->logger->debug('[ShibbolethAuthenticator::onAuthenticationSuccess]');
         // on success, let the request continue
         return;
+        $session = $request->getSession();
+        if ($session->has('referer')) {
+            if ($session->get('referer') !== null && $session->get('referer') !== '')
+            {
+                $response = new RedirectResponse($session->get('referer'));
+            } else {
+                $response = new RedirectResponse($request->getBaseUrl());
+            }
+        } else {
+            $response = new RedirectResponse($request->getBaseUrl());
+        }
+        return $response;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
