@@ -2,6 +2,8 @@
 
 namespace Niif\ShibAuthBundle\Security;
 
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -12,7 +14,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
-
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 
 class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements LogoutSuccessHandlerInterface
@@ -20,12 +21,14 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
     private $logger;
     private $config;
     private $tokenStorage;
+    private $router;
 
-    public function __construct($logger, $config, TokenStorage $tokenStorage)
+    public function __construct($logger, $config, TokenStorage $tokenStorage, Router $router)
     {
         $this->config = $config;
         $this->logger = $logger;
         $this->tokenStorage = $tokenStorage;
+        $this->router = $router;
     }
 
     /**
@@ -146,8 +149,12 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
 
     private function getLogoutURL()
     {
-        $currentURL = urlencode($this->getProtocol().'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-        return $this->config['baseURL'].$this->config['logoutPath'].'?return='.$this->config['logoutReturnPath'];
+        try {
+            $returnPath = $this->router->generate($this->config['logoutReturnPath'], array(), $this->router::ABSOLUTE_URL);
+        } catch (RouteNotFoundException $e) {
+            $returnPath = $this->config['logoutReturnPath'];
+        }
+        return $this->config['baseURL'].$this->config['logoutPath'].'?return='.$returnPath;
     }
 
     private function getProtocol()

@@ -32,7 +32,7 @@ niif_shib_auth: ~
     # baseURL:          "%shib_auth_base_url%" # optional, have default value:  /Shibboleth.sso/
     # sessionInitiator: "%shib_auth_session_initiator%" # optional, have default value: Login
     # logoutPath:       "%shib_auth_logout_path%" # optional, have default value: Logout
-    # logoutReturnPath:       "%shib_auth_logout_return_path%" # optional, have default value: "/"
+    # logoutReturnPath:       "%shib_auth_logout_return_path%" # optional, have default value: "/" you should use absolute url, or named symfony route too.
     # usernameAttribute: "%shib_auth_username_attribute%" # optional, have default value: REMOTE_USER
 ...
 ```
@@ -61,6 +61,19 @@ in `app/config/security.yml`
                 invalidate_session: true
                 success_handler: niif_shib_auth.shib_authenticator
         ...
+```
+You should create a simple the logout action in any controller:
+ 
+ ```php
+    /**
+     * @Route("/logout")
+     * @Template()
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function logoutAction()
+    {
+        return $this->redirect($this->generateUrl('logged_out'));
+    }
 ```
 
 # Impersonate
