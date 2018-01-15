@@ -29,11 +29,12 @@ update your ```app/config/config.yml```
 ...
 niif_shib_auth: ~
 # niif_shib_auth:
-    # baseURL:          "%shib_auth_base_url%" # optional, have default value:  /Shibboleth.sso/
-    # sessionInitiator: "%shib_auth_session_initiator%" # optional, have default value: Login
-    # logoutPath:       "%shib_auth_logout_path%" # optional, have default value: Logout
-    # logoutReturnPath:       "%shib_auth_logout_return_path%" # optional, have default value: "/" you should use absolute url, or named symfony route too.
+    # baseURL:           "%shib_auth_base_url%" # optional, have default value:  /Shibboleth.sso/
+    # sessionInitiator:  "%shib_auth_session_initiator%" # optional, have default value: Login
+    # logoutPath:        "%shib_auth_logout_path%" # optional, have default value: Logout
+    # logoutReturnPath:  "%shib_auth_logout_return_path%" # optional, have default value: "/" you should use absolute url, or named symfony route too.
     # usernameAttribute: "%shib_auth_username_attribute%" # optional, have default value: REMOTE_USER
+    # moduleAttribute:   "%shib_auth_module_attribute%" # optional, the name of the server variable for ensure shibboleth session exist default: HTTP_SHIB_APPLICATION_ID
 ...
 ```
 
