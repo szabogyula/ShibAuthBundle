@@ -36,6 +36,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('usernameAttribute')
                     ->defaultValue('REMOTE_USER')
                 ->end()
+                ->scalarNode('moduleAttribute')
+                    ->defaultValue('HTTP_SHIB_APPLICATION_ID')
+                ->end()
             ->end()
         ;
         

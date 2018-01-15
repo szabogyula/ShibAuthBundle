@@ -38,10 +38,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
     public function getCredentials(Request $request)
     {
         $this->logger->debug('[ShibbolethAuthenticator::getCredential]');
-        $shibbolethModuleAttribute = 'HTTP_SHIB_APPLICATION_ID';
-        if (array_key_exists('moduleAttribute', $this->config)) {
-            $shibbolethModuleAttribute = $this->config['moduleAttribute'];
-        };
+        $shibbolethModuleAttribute = $this->config['moduleAttribute'];
         if ($request->server->has($shibbolethModuleAttribute)) {
             // What you return here will be passed to getUser() as $credentials
             $username = $request->server->get($this->config['usernameAttribute']);
