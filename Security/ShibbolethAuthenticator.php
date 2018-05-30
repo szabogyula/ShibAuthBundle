@@ -150,7 +150,8 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
     private function getLogoutURL()
     {
         try {
-            $returnPath = $this->router->generate($this->config['logoutReturnPath'], array(), $this->router::ABSOLUTE_URL);
+            $router = $this->router;
+            $returnPath = $this->router->generate($this->config['logoutReturnPath'], array(), $router::ABSOLUTE_URL);
         } catch (RouteNotFoundException $e) {
             $returnPath = $this->config['logoutReturnPath'];
         }
