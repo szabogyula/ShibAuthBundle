@@ -81,10 +81,12 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
 
             return $retarray;
         } else {
+            $this->logger->error('[ShibbolethAuthenticator::getCredential] no moduleAttribute '.$shibbolethModuleAttribute.' is not found in $_SERVER array: ' . var_export($_SERVER, 1));
             throw new AuthenticationException(
                 'There is no shibboleth session, not found '
                 . $shibbolethModuleAttribute
                 . ' key in $_SERVER array'
+                . var_export($_SERVER, 1)
             );
         }
     }
