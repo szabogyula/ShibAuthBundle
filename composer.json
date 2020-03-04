@@ -15,5 +15,10 @@
     "autoload": {
         "psr-4": { "Niif\\ShibAuthBundle\\": "" }
     },
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "symfony/security-guard": "^5.0",
+        "symfony/routing": "^5.0",
+        "symfony/framework-bundle": "^5.0"
+    }
 }

@@ -60,6 +60,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
     /**
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
+     *
      */
     public function getCredentials(Request $request)
     {
@@ -152,7 +153,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
      *
      * @return RedirectResponse|void
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
         $this->logger->debug('[ShibbolethAuthenticator::onAuthenticationSuccess]');
 
@@ -253,4 +254,18 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
 
         return new RedirectResponse($this->getLogoutURL());
     }
+
+    /**
+     * Does the authenticator support the given Request?
+     *
+     * If this returns false, the authenticator will be skipped.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function supports(Request $request)
+    {
+        return true;
+    }
+
 }
