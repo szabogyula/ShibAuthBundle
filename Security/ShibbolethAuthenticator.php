@@ -12,7 +12,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -44,10 +43,10 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
     /**
      * ShibbolethAuthenticator constructor.
      *
-     * @param              $logger
-     * @param              $config
-     * @param TokenStorage $tokenStorage
-     * @param Router       $router
+     * @param                       $logger
+     * @param                       $config
+     * @param TokenStorageInterface $tokenStorage
+     * @param Router                $router
      */
     public function __construct($logger, $config, TokenStorageInterface $tokenStorage, Router $router)
     {
