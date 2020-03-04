@@ -153,7 +153,7 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
      *
      * @return RedirectResponse|void
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         $this->logger->debug('[ShibbolethAuthenticator::onAuthenticationSuccess]');
 
