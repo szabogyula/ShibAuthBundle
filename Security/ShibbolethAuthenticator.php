@@ -264,7 +264,12 @@ class ShibbolethAuthenticator extends AbstractGuardAuthenticator implements Logo
      */
     public function supports(Request $request)
     {
-        return true;
+        $shibbolethModuleAttribute = $this->config['moduleAttribute'];
+        if ($request->server->has($shibboletModuleAttribute)) {
+            return true;
+        }
+        
+        return false;
     }
 
 }
